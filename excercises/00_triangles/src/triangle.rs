@@ -26,9 +26,7 @@ pub type TriangleSides = [u32; TRIANGLE_SIDES];
 #[derive(Debug)]
 pub struct Triangle {
     sides: TriangleSides,
-    squares: TriangleSides,
     perimeter: u32,
-    squares_sum: u32,
 }
 
 impl Triangle {
@@ -56,20 +54,9 @@ impl Triangle {
     }
 
     fn from_sides(sides: TriangleSides) -> Triangle {
-        let mut squares = TriangleSides::default();
-        for (side, square) in sides.iter().zip(squares.iter_mut()) {
-            *square = side * side;
-        }
-
         let perimeter: u32 = sides.iter().sum();
-        let squares_sum: u32 = squares.iter().sum();
 
-        Triangle {
-            sides,
-            squares,
-            perimeter,
-            squares_sum,
-        }
+        Triangle { sides, perimeter }
     }
 
     pub fn sides(&self) -> &TriangleSides {
@@ -78,14 +65,8 @@ impl Triangle {
     pub fn side(&self, index: usize) -> u32 {
         self.sides[index]
     }
-    pub fn squares(&self) -> &TriangleSides {
-        &self.squares
-    }
     pub fn perimeter(&self) -> u32 {
         self.perimeter
-    }
-    pub fn squares_sum(&self) -> u32 {
-        self.squares_sum
     }
 
     pub fn is_valid(&self) -> bool {
@@ -98,10 +79,22 @@ impl Triangle {
         true
     }
 
+    fn squares(&self) -> TriangleSides {
+        let mut squares = TriangleSides::default();
+        for (side, square) in self.sides().iter().zip(squares.iter_mut()) {
+            *square = side * side;
+        }
+
+        squares
+    }
+
     pub fn is_right(&self) -> bool {
+        let squares = self.squares();
+        let squares_sum: u32 = squares.iter().sum();
+
         self.squares()
             .iter()
-            .any(|square| self.squares_sum() == square * 2)
+            .any(|square| squares_sum == square * 2)
     }
 
     fn is_equiliteral(&self) -> Option<TriangleType> {
