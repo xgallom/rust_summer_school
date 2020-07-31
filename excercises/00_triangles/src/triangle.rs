@@ -97,7 +97,7 @@ impl Triangle {
             .any(|square| squares_sum == square * 2)
     }
 
-    fn is_equiliteral(&self) -> Option<TriangleType> {
+    fn is_equilateral(&self) -> Option<TriangleType> {
         let first_side = self.side(TriangleSide::A as usize);
 
         if self.sides().iter().skip(1).all(|side| *side == first_side) {
@@ -120,7 +120,7 @@ impl Triangle {
     }
 
     pub fn triangle_type(&self) -> TriangleType {
-        self.is_equiliteral()
+        self.is_equilateral()
             .or(self.is_isoceles())
             .unwrap_or(TriangleType::Scalene)
     }

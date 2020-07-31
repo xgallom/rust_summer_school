@@ -1,5 +1,6 @@
-use crate::triangle::Triangle;
 mod triangle;
+
+use crate::triangle::Triangle;
 
 fn main() {
     let triangle = Triangle::read_from_console();
